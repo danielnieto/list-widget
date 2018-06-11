@@ -2,6 +2,35 @@ $separation: 12px;
 $separationFactor: 0.6;
 $scalingFactor: 0.2;
 $cardsNumber: 5;
+$animationDuration: 0.3s;
+
+@keyframes adding {
+    from {
+        transform: translateY($separation*2) scale(1.1);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes removing {
+    from {
+        top: $separation * $cardsNumber * $separationFactor;
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(
+                $separation * $cardsNumber * $separationFactor + $separation
+            )
+            scale(1.1);
+        opacity: 0;
+    }
+}
 
 body {
     font-family: "Helvetica";
@@ -36,8 +65,16 @@ figure.cards {
         }
 
         &.removing {
-            transform: translateY($separation*2) scale(1.1);
-            opacity: 0;
+            animation-name: removing;
+            animation-duration: $animationDuration;
+            animation-fill-mode: both;
+            z-index: 1;
+        }
+
+        &.adding {
+            animation-name: adding;
+            animation-duration: $animationDuration;
+            animation-fill-mode: both;
         }
     }
 }
