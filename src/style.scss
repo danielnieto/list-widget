@@ -1,81 +1,96 @@
-$separation: 12px;
-$separationFactor: 0.6;
-$scalingFactor: 0.2;
+$separation: 5px;
 $cardsNumber: 5;
-$animationDuration: 0.3s;
+$animationDuration: 0.2s;
+$minScale: 0.75;
+$minOpacity: 0.1;
+$scaleStep: (1 - $minScale)/($cardsNumber - 1);
+$opacityStep: (1 - $minOpacity)/($cardsNumber - 1);
+$listWidth: 274px;
+$listHeight: 286px;
+$cardsHeight: 247px;
 
-@keyframes adding {
+@keyframes card-transition {
     from {
-        transform: translateY($separation*2) scale(1.1);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-@keyframes removing {
-    from {
-        top: $separation * $cardsNumber * $separationFactor;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
 
     to {
-        transform: translateY(
-                $separation * $cardsNumber * $separationFactor + $separation
-            )
-            scale(1.1);
+        transform: translateY($separation) scale(1 + $scaleStep);
         opacity: 0;
     }
 }
 
 body {
     font-family: "Helvetica";
-    background-color: aliceblue;
+    background-color: white;
+    padding: 10em;
 }
 
-figure.cards {
-    border: 1px solid gainsboro;
-    position: relative;
-    display: block;
-    height: 250px;
-    width: 200px;
-    .card {
-        display: flex;
-        width: 200px;
-        height: 200px;
-        color: white;
-        font-size: 24px;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 -2px 1px 0px rgba(0, 0, 0, 0.1);
-        position: absolute;
-        transition: 0.3s;
+.list {
+    width: $listWidth;
+    height: $listHeight;
+    background: #ffffff;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.02);
+    border: 1px solid #f3f3f3;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    figure.cards {
+        height: $cardsHeight;
+        margin: 0;
+        position: relative;
+        box-sizing: border-box;
+        .card {
+            display: flex;
+            height: $cardsHeight;
+            width: $listWidth !important;
+            position: absolute;
+            transition-duration: $animationDuration;
+            box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.02);
+            border-radius: 4px 4px 0 0;
+            transform-origin: center top;
+            align-items: stretch;
+            margin: 0;
+            overflow: hidden;
 
-        @for $i from 1 through $cardsNumber {
-            &:nth-of-type(#{$i}) {
-                transform: scale(
-                    1 - (($scalingFactor * ($cardsNumber - $i))/10)
-                );
-                top: $separation * $i * $separationFactor;
+            @for $i from 1 through $cardsNumber {
+                &:nth-of-type(#{$i}) {
+                    transform: translateY($separation * ($i - $cardsNumber))
+                        scale(1 - ($scaleStep * ($cardsNumber - $i)));
+                    opacity: 1 - ($opacityStep * ($cardsNumber - $i));
+                }
+            }
+
+            &.removing {
+                animation-name: card-transition;
+                animation-duration: $animationDuration;
+                animation-fill-mode: both;
+                z-index: 1;
+            }
+
+            &.adding {
+                animation-name: card-transition;
+                animation-duration: $animationDuration;
+                animation-fill-mode: both;
+                animation-direction: reverse;
+            }
+
+            img {
+                object-fit: cover;
+                width: 100%;
             }
         }
-
-        &.removing {
-            animation-name: removing;
-            animation-duration: $animationDuration;
-            animation-fill-mode: both;
-            z-index: 1;
-        }
-
-        &.adding {
-            animation-name: adding;
-            animation-duration: $animationDuration;
-            animation-fill-mode: both;
-        }
+    }
+    .title {
+        height: 41px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        text-indent: 1rem;
+        color: #9b9b9b;
+        font-family: "Helvetica";
+        font-size: 13px;
     }
 }
 

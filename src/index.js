@@ -1,12 +1,12 @@
 /* eslint-disable */
 
 var $cards = $(".cards");
-var animationSpeed = 300;
+var animationSpeed = 200;
 
 $("button[data-next]").click(function() {
     var $topMostCard = $cards.find(".card").last();
 
-    $topMostCard.addClass("removing").prependTo($cards);
+    $topMostCard.prependTo($cards).addClass("removing");
 
     setTimeout(function() {
         $topMostCard.removeClass("removing");
