@@ -1,120 +1,31 @@
 /* eslint-disable */
 
-var $cards = $(".cards");
-var animationSpeed = 300;
+import "./list.js";
 
-function showNext() {
-    var $topMostCard = $cards.find(".card").last();
+var listParams = {
+    title: "Colorfuls",
+    items: [
+        "https://img1-staging-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/7/large_thumb_55w3c1tkl9suq73gca47ixa0o95oirua.jpg",
+        "https://img1-staging-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/6/large_thumb_ylpm8klnrgfe1aiomeg0dlxp8mwofh8w.jpg",
+        "https://img1-staging-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/7/large_thumb_55w3c1tkl9suq73gca47ixa0o95oirua.jpg",
+        "https://img1-staging-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/6/large_thumb_ylpm8klnrgfe1aiomeg0dlxp8mwofh8w.jpg",
+        "https://img1-staging-net.s3-accelerate.amazonaws.com/uploads/stage/stage_image/7/large_thumb_55w3c1tkl9suq73gca47ixa0o95oirua.jpg"
+    ]
+};
 
-    $topMostCard.prependTo($cards).addClass("removing");
+var listParams2 = {
+    title: "Colorfuls 2",
+    items: [
+        "https://uploads.codesandbox.io/uploads/user/a6f59428-f0d7-41bd-8f8d-53d125d25caf/S1iB-img1.png",
+        "https://uploads.codesandbox.io/uploads/user/a6f59428-f0d7-41bd-8f8d-53d125d25caf/lH-f-img2.png",
+        "https://uploads.codesandbox.io/uploads/user/a6f59428-f0d7-41bd-8f8d-53d125d25caf/s1aI-img3.png",
+        "https://uploads.codesandbox.io/uploads/user/a6f59428-f0d7-41bd-8f8d-53d125d25caf/QSZw-img4.png",
+        "https://uploads.codesandbox.io/uploads/user/a6f59428-f0d7-41bd-8f8d-53d125d25caf/C0NN-img5.png"
+    ]
+};
 
-    setTimeout(function() {
-        $topMostCard.removeClass("removing");
-    }, animationSpeed);
-}
+var list = new UI.List(listParams);
+var list2 = new UI.List(listParams2);
 
-function showPrevious() {
-    var $bottomMostCard = $cards.find(".card").first();
-
-    $bottomMostCard.appendTo($cards).addClass("adding");
-
-    setTimeout(function() {
-        $bottomMostCard.removeClass("adding");
-    }, animationSpeed);
-}
-
-$("button.list_button-right").click(showNext);
-
-$("button.list_button-left").click(showPrevious);
-
-(function($) {
-    $.fn.swipe = function(options) {
-        // Default thresholds & swipe functions
-        var defaults = {
-            threshold: {
-                x: 30,
-                y: 10
-            },
-            swipeLeft: function() {
-                alert("swiped left");
-            },
-            swipeRight: function() {
-                alert("swiped right");
-            }
-        };
-
-        var options = $.extend(defaults, options);
-
-        if (!this) return false;
-
-        return this.each(function() {
-            var me = $(this);
-
-            // Private variables for each element
-            var originalCoord = { x: 0, y: 0 };
-            var finalCoord = { x: 0, y: 0 };
-
-            // Screen touched, store the original coordinate
-            function touchStart(event) {
-                //console.log('Starting swipe gesture...')
-                originalCoord.x = event.targetTouches[0].pageX;
-                originalCoord.y = event.targetTouches[0].pageY;
-            }
-
-            // Store coordinates as finger is swiping
-            function touchMove(event) {
-                event.preventDefault();
-                finalCoord.x = event.targetTouches[0].pageX; // Updated X,Y coordinates
-                finalCoord.y = event.targetTouches[0].pageY;
-            }
-
-            // Done Swiping
-            // Swipe should only be on X axis, ignore if swipe on Y axis
-            // Calculate if the swipe was left or right
-            function touchEnd(event) {
-                //console.log('Ending swipe gesture...')
-                var changeY = originalCoord.y - finalCoord.y;
-                if (
-                    changeY < defaults.threshold.y &&
-                    changeY > defaults.threshold.y * -1
-                ) {
-                    var changeX = originalCoord.x - finalCoord.x;
-
-                    if (changeX > defaults.threshold.x) {
-                        defaults.swipeLeft();
-                    }
-                    if (changeX < defaults.threshold.x * -1) {
-                        defaults.swipeRight();
-                    }
-                }
-            }
-
-            // Swipe was started
-            function touchStart(event) {
-                //console.log('Starting swipe gesture...')
-                originalCoord.x = event.targetTouches[0].pageX;
-                originalCoord.y = event.targetTouches[0].pageY;
-
-                finalCoord.x = originalCoord.x;
-                finalCoord.y = originalCoord.y;
-            }
-
-            // Swipe was canceled
-            function touchCancel(event) {
-                //console.log('Canceling swipe gesture...')
-            }
-
-            // Add gestures to all swipable areas
-            this.addEventListener("touchstart", touchStart, false);
-            this.addEventListener("touchmove", touchMove, false);
-            this.addEventListener("touchend", touchEnd, false);
-            this.addEventListener("touchcancel", touchCancel, false);
-        });
-    };
-})(jQuery);
-
-$(".card").swipe({
-    swipeLeft: function() {
-        alert("izquierda");
-    }
-});
+list.render(document.body.querySelector("#app"));
+list2.render(document.body.querySelector("#app"));

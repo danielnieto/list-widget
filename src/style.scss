@@ -24,22 +24,17 @@ $buttonWidth: 24px;
     }
 }
 
-body {
-    font-family: "Helvetica";
-    background-color: white;
-    padding: 10em;
-}
-
-.list {
+article.ui-list {
     width: $listWidth;
     height: $listHeight;
     background: #ffffff;
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.02);
     border: 1px solid #f3f3f3;
     border-radius: 4px;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     position: relative;
+    margin-top: $maxCardsNumber * $separation;
     figure.cards {
         height: $cardsHeight;
         margin: 0;
