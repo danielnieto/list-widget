@@ -1,22 +1,25 @@
 $separation: 5px;
-$cardsNumber: 5;
-$animationDuration: 0.2s;
+$maxCardsNumber: 5;
+$animationDuration: 0.3s;
 $minScale: 0.75;
 $minOpacity: 0.1;
-$scaleStep: (1 - $minScale)/($cardsNumber - 1);
-$opacityStep: (1 - $minOpacity)/($cardsNumber - 1);
+$scaleStep: (1 - $minScale)/($maxCardsNumber - 1);
+$opacityStep: (1 - $minOpacity)/($maxCardsNumber - 1);
 $listWidth: 274px;
 $listHeight: 286px;
 $cardsHeight: 247px;
 
+$buttonHeight: 67px;
+$buttonWidth: 24px;
+
 @keyframes card-transition {
-    from {
+    0% {
         transform: translateY(0) scale(1);
         opacity: 1;
     }
 
-    to {
-        transform: translateY($separation) scale(1 + $scaleStep);
+    100% {
+        transform: translateY(40px);
         opacity: 0;
     }
 }
@@ -36,11 +39,13 @@ body {
     border-radius: 4px;
     display: flex;
     flex-direction: column;
+    position: relative;
     figure.cards {
         height: $cardsHeight;
         margin: 0;
         position: relative;
         box-sizing: border-box;
+
         .card {
             display: flex;
             height: $cardsHeight;
@@ -54,11 +59,11 @@ body {
             margin: 0;
             overflow: hidden;
 
-            @for $i from 1 through $cardsNumber {
-                &:nth-of-type(#{$i}) {
-                    transform: translateY($separation * ($i - $cardsNumber))
-                        scale(1 - ($scaleStep * ($cardsNumber - $i)));
-                    opacity: 1 - ($opacityStep * ($cardsNumber - $i));
+            @for $i from 1 through $maxCardsNumber {
+                &:nth-last-of-type(#{$i}) {
+                    transform: translateY(-$separation * ($i - 1))
+                        scale(1 - ($scaleStep * ($i - 1)));
+                    opacity: 1 - ($opacityStep * ($i - 1));
                 }
             }
 
@@ -91,26 +96,40 @@ body {
         color: #9b9b9b;
         font-family: "Helvetica";
         font-size: 13px;
+        background-color: white;
+        z-index: 1;
     }
-}
 
-// Card colors
-.card-1 {
-    background-color: lightblue;
-}
+    button.list_button {
+        display: none;
+    }
 
-.card-2 {
-    background-color: coral;
-}
+    &:hover {
+        button.list_button {
+            display: flex;
+            height: $buttonHeight;
+            width: $buttonWidth;
+            position: absolute;
+            top: $cardsHeight / 2 - $buttonHeight / 2;
+            padding: 0;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background-color: #000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.35;
+            z-index: 2;
 
-.card-3 {
-    background-color: brown;
-}
+            &.list_button-right {
+                right: 0;
+                border-radius: 4px 0 0 4px;
+            }
 
-.card-4 {
-    background-color: palevioletred;
-}
-
-.card-5 {
-    background-color: yellowgreen;
+            &.list_button-left {
+                left: 0;
+                border-radius: 0 4px 4px 0;
+            }
+        }
+    }
 }
